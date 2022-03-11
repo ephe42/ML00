@@ -4,12 +4,6 @@
 from matrix import Matrix, Vector
 
 if __name__ == "__main__":
-    print("putaing")
-    m1 = Matrix([[1.0, "2.0"], [3.0, 4.0]])
-    print(m1)
-    print(m1.shape)
-    print()
-
     m1 = Matrix([[0.0, 1.0], [2.0, 3.0], [4.0, 5.0]])
     print(m1.shape)
     # Output:
@@ -48,7 +42,6 @@ if __name__ == "__main__":
 
     print()
 
-    print("Vector test")
     v1 = Vector([[1, 2, 3]])  # create a row vector
     print(v1)
     v2 = Vector([[1], [2], [3]])  # create a column vector
@@ -71,5 +64,6 @@ if __name__ == "__main__":
     print(v1 + v2)
     # Output:
     # Vector([[3],[6],[11]])
+    # Or: Vector([[8], [16]
 
     print(v1.dot(v2))

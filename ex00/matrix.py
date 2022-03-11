@@ -9,6 +9,12 @@ class Matrix:
         if args and isinstance(args, list) and isinstance(args[0], list):
             self.data = args
             self.shape = (len(self.data), len(self.data[0]))
+            for i in range(len(self.data)):
+                if len(self.data[i]) != self.shape[1]:
+                    raise ValueError("invalid shape")
+                for j in self.data[i]:
+                    if not isinstance(j, float) and not isinstance(j, int):
+                        raise ValueError("matrix must only contain float or int")
         elif (
             isinstance(args, tuple)
             and len(args) == 2
@@ -216,6 +222,10 @@ class Vector(Matrix):
             self.shape = (1, len(self.data))
             if isinstance(self.data[0], list):
                 self.shape = (len(self.data), len(self.data[0]))
+                for i in range(len(self.data)):
+                    for j in self.data[i]:
+                        if not isinstance(j, float) and not isinstance(j, int):
+                            raise ValueError("matrix must only contain float or int")
         elif (
             isinstance(args, tuple)
             and len(args) == 2
