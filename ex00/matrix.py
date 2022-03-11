@@ -2,30 +2,21 @@
 # -*- coding: utf-8 -*-
 
 
-class Vector:
+class Matrix:
     def __init__(self, args):
-        self.values = []
+        self.data = []
         self.shape = (0, 0)
-        if args and isinstance(args, list):
-            self.values = args
-            self.shape = (1, len(self.values))
-            if isinstance(self.values[0], list):
-                self.shape = (len(self.values), len(self.values[0]))
-        elif isinstance(args, int) and args > 0:
-            for i in range(0, args):
-                self.values.append([float(i)])
-            self.shape = (args, 1)
+        if args and isinstance(args, list) and isinstance(args[0], list):
+            self.data = args
+            self.shape = (len(self.data), len(self.data[0]))
         elif (
             isinstance(args, tuple)
             and len(args) == 2
             and isinstance(args[0], int)
             and isinstance(args[1], int)
         ):
-            if args[0] == args[1] or args[0] > args[1]:
-                raise ValueError("invalid args")
-            for i in range(args[0], args[1]):
-                self.values.append([float(i)])
-            self.shape = (len(self.values), 1)
+            self.data = [[0.0 for j in range(args[1])] for i in range(args[0])]
+            self.shape = args
         else:
             raise ValueError("invalid args")
 
@@ -33,132 +24,146 @@ class Vector:
         try:
             if shape[0] == 1:
                 matrix = [fill_value for x in range(shape[1]) for y in range(shape[0])]
+                return Vector(matrix)
             else:
                 matrix = [
                     [fill_value for x in range(shape[1])] for y in range(shape[0])
                 ]
-            return Vector(matrix)
+                return Matrix(matrix)
         except:
             raise ValueError("shape must be a tuple")
 
+    # add : only matrices of same dimensions.
     def __add__(self, args):
         res = []
-        if self.values:
-            if args and isinstance(args, Vector):
+        if self.data:
+            if args and isinstance(args, Matrix):
                 if self.shape == args.shape:
                     res = self.full(self.shape, 0)
                     if self.shape[0] == 1:
-                        for i in range(0, self.shape[1]):
-                            res.values[i] = self.values[i] + args.values[i]
+                        for i in range(self.shape[1]):
+                            res.data[i] = self.data[i] + args.data[i]
                     else:
-                        for i in range(0, self.shape[0]):
-                            for j in range(0, self.shape[1]):
-                                res.values[i][j] = self.values[i][j] + args.values[i][j]
+                        for i in range(self.shape[0]):
+                            for j in range(self.shape[1]):
+                                res.data[i][j] = self.data[i][j] + args.data[i][j]
                 else:
-                    raise ValueError("vectors don't have the same shape")
+                    raise ValueError("matrix don't have the same shape")
             else:
                 raise TypeError("args must be vector")
         else:
-            raise ValueError("vector is empty")
+            raise ValueError("matrix is empty")
         return res
 
     def __radd__(self, args):
         res = []
-        if self.values:
-            if args and isinstance(args, Vector):
+        if self.data:
+            if args and isinstance(args, Matrix):
                 if self.shape == args.shape:
                     res = self.full(self.shape, 0)
                     if self.shape[0] == 1:
-                        for i in range(0, self.shape[1]):
-                            res.values[i] = args.values[i] + self.values[i]
+                        for i in range(self.shape[1]):
+                            res.data[i] = args.data[i] + self.data[i]
                     else:
-                        for i in range(0, self.shape[0]):
-                            for j in range(0, self.shape[1]):
-                                res.values[i][j] = args.values[i][j] + self.values[i][j]
+                        for i in range(self.shape[0]):
+                            for j in range(self.shape[1]):
+                                res.data[i][j] = args.data[i][j] + self.data[i][j]
                 else:
-                    raise ValueError("vectors don't have the same shape")
+                    raise ValueError("matrix don't have the same shape")
             else:
-                raise TypeError("args must be vector")
+                raise TypeError("args must be matrix")
         else:
-            raise ValueError("vector is empty")
+            raise ValueError("matrix is empty")
         return res
 
-    # add : only vectors of same dimensions.
+    # sub : only matrices of same dimensions.
     def __sub__(self, args):
         res = []
-        if self.values:
-            if args and isinstance(args, Vector):
+        if self.data:
+            if args and isinstance(args, Matrix):
                 if self.shape == args.shape:
                     res = self.full(self.shape, 0)
                     if self.shape[0] == 1:
-                        for i in range(0, self.shape[1]):
-                            res.values[i] = self.values[i] - args.values[i]
+                        for i in range(self.shape[1]):
+                            res.data[i] = self.data[i] - args.data[i]
                     else:
-                        for i in range(0, self.shape[0]):
-                            for j in range(0, self.shape[1]):
-                                res.values[i][j] = self.values[i][j] - args.values[i][j]
+                        for i in range(self.shape[0]):
+                            for j in range(self.shape[1]):
+                                res.data[i][j] = self.data[i][j] - args.data[i][j]
                 else:
-                    raise ValueError("vectors don't have the same shape")
+                    raise ValueError("matrix don't have the same shape")
             else:
-                raise TypeError("args must be vector")
+                raise TypeError("args must be matrix")
         else:
-            raise ValueError("vector is empty")
+            raise ValueError("matrix is empty")
         return res
 
     def __rsub__(self, args):
         res = []
-        if self.values:
-            if args and isinstance(args, Vector):
+        if self.data:
+            if args and isinstance(args, Matrix):
                 if self.shape == args.shape:
                     res = self.full(self.shape, 0)
                     if self.shape[0] == 1:
-                        for i in range(0, self.shape[1]):
-                            res.values[i] = args.values[i] - self.values[i]
+                        for i in range(self.shape[1]):
+                            res.data[i] = args.data[i] - self.data[i]
                     else:
-                        for i in range(0, self.shape[0]):
-                            for j in range(0, self.shape[1]):
-                                res.values[i][j] = args.values[i][j] - self.values[i][j]
+                        for i in range(self.shape[0]):
+                            for j in range(self.shape[1]):
+                                res.data[i][j] = args.data[i][j] - self.data[i][j]
                 else:
-                    raise ValueError("vectors don't have the same shape")
+                    raise ValueError("matrix don't have the same shape")
             else:
-                raise TypeError("args must be vector")
+                raise TypeError("args must be matrix")
         else:
-            raise ValueError("vector is empty")
+            raise ValueError("matrix is empty")
         return res
 
-    # sub : only vectors of same dimensions.
     def __truediv__(self, args):
         res = []
         try:
             args = float(args)
             res = self.full(self.shape, 0)
             if self.shape[0] == 1:
-                for i in range(0, self.shape[1]):
-                    res.values[i] = self.values[i] / args
+                for i in range(self.shape[1]):
+                    res.data[i] = self.data[i] / args
             else:
-                for i in range(0, self.shape[0]):
-                    for j in range(0, self.shape[1]):
-                        res.values[i][j] = self.values[i][j] / args
+                for i in range(self.shape[0]):
+                    for j in range(self.shape[1]):
+                        res.data[i][j] = self.data[i][j] / args
         except:
             raise TypeError("args must be scalar not null")
         return res
 
     def __rtruediv__(self, args):
-        raise ValueError("A scalar cannot be divided by a Vector")
+        raise ValueError("A scalar cannot be divided by a matrix")
 
-    # div : only scalars.
+    def get_column(self, matrix):
+        for i in range(matrix.shape[1]):
+            ret = []
+            for j in range(matrix.shape[0]):
+                ret.append(matrix.data[j][i])
+            yield ret
+
+    def get_line(self, matrix):
+        for i in range(matrix.shape[0]):
+            yield matrix.data[i]
+
+    # mul : scalars, vectors and matrices , can have errors with vectors and matrices,
+    # returns a Vector if we perform Matrix * Vector multiplication.
     def __mul__(self, args):
         res = []
         try:
-            args = float(args)
-            res = self.full(self.shape, 0)
-            if self.shape[0] == 1:
-                for i in range(0, self.shape[1]):
-                    res.values[i] = self.values[i] * args
-            else:
-                for i in range(0, self.shape[0]):
-                    for j in range(0, self.shape[1]):
-                        res.values[i][j] = self.values[i][j] * args
+            if self.shape[1] == args.shape[0]:
+                # for l in self.get_line(self):
+                #     tmp = []
+                #     for c in self.get_column(args):
+                #         tmp.append(sum([a * b for a, b in zip(l, c)]))
+                #     res.append(tmp)
+                res = [
+                    [sum([a * b for a, b in zip(l, c)]) for c in self.get_column(args)]
+                    for l in self.get_line(self)
+                ]
         except:
             raise TypeError("args must be scalar")
         return res
@@ -166,25 +171,63 @@ class Vector:
     def __rmul__(self, args):
         res = []
         try:
-            args = float(args)
-            res = self.full(self.shape, 0)
-            if self.shape[0] == 1:
-                for i in range(0, self.shape[1]):
-                    res.values[i] = args * self.values[i]
-            else:
-                for i in range(0, self.shape[0]):
-                    for j in range(0, self.shape[1]):
-                        res.values[i][j] = args * self.values[i][j]
+            if self.shape[1] == args.shape[0]:
+                res = [
+                    [sum([a * b for a, b in zip(l, c)]) for c in self.get_column(args)]
+                    for l in self.get_line(self)
+                ]
         except:
             raise TypeError("args must be scalar")
         return res
 
-    # mul : only scalars.
     def __str__(self):
-        return f"{self.values}"
+        return f"{self.data}"
 
     def __repr__(self):
         return str(self)
+
+    def T(self):
+        res = []
+        try:
+            res = self.full((self.shape[1], self.shape[0]), 0)
+            if self.shape[0] == 1:
+                for i in range(self.shape[0]):
+                    for j in range(self.shape[1]):
+                        res.data[j][i] = self.data[j]
+            elif self.shape[1] == 1:
+                for i in range(self.shape[0]):
+                    for j in range(self.shape[1]):
+                        res.data[i] = self.data[i][j]
+            else:
+                for i in range(self.shape[0]):
+                    for j in range(self.shape[1]):
+                        res.data[j][i] = self.data[i][j]
+        except:
+            raise ValueError("matrix is empty")
+        return res
+
+
+class Vector(Matrix):
+    def __init__(self, args):
+        self.data = []
+        self.shape = (0, 0)
+        if args and isinstance(args, list):
+            self.data = args
+            self.shape = (1, len(self.data))
+            if isinstance(self.data[0], list):
+                self.shape = (len(self.data), len(self.data[0]))
+        elif (
+            isinstance(args, tuple)
+            and len(args) == 2
+            and isinstance(args[0], int)
+            and isinstance(args[1], int)
+        ):
+            self.data = [[0.0 for j in range(args[1])] for i in range(args[0])]
+            self.shape = args
+        else:
+            raise ValueError("invalid args")
+        if self.shape[0] != 1 and self.shape[1] != 1:
+            raise ValueError("must be vector and not matrix")
 
     def dot(self, args):
         res = 0
@@ -194,28 +237,8 @@ class Vector:
                 tmp = self.T()
             if args.shape[0] != 1:
                 args = args.T()
-            for i in range(0, tmp.shape[1]):
-                res += tmp.values[i] * args.values[i]
+            for i in range(tmp.shape[1]):
+                res += tmp.data[i] * args.data[i]
         except:
             raise TypeError("must be vectors of the same shape")
-        return res
-
-    def T(self):
-        res = []
-        try:
-            res = self.full((self.shape[1], self.shape[0]), 0)
-            if self.shape[0] == 1:
-                for i in range(0, self.shape[0]):
-                    for j in range(0, self.shape[1]):
-                        res.values[j][i] = self.values[j]
-            elif self.shape[1] == 1:
-                for i in range(0, self.shape[0]):
-                    for j in range(0, self.shape[1]):
-                        res.values[i] = self.values[i][j]
-            else:
-                for i in range(0, self.shape[0]):
-                    for j in range(0, self.shape[1]):
-                        res.values[j][i] = self.values[i][j]
-        except:
-            raise ValueError("vector is empty")
         return res
