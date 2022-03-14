@@ -16,7 +16,7 @@ def add_intercept(x):
     This function should not raise any Exception.
     """
     if isinstance(x, np.ndarray) and x.size != 0 and x.shape[1] >= 1:
-        return np.insert(x, 0, values=1.0, axis=1)
+        return np.insert(x, 0, values=1.0, axis=1).astype(float)
     return
 
 
