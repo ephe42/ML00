@@ -57,7 +57,7 @@ if __name__ == "__main__":
     v1 = Vector([[1], [2], [3]])
     print(m1 * v1)
     # Output:
-    #     Matrix([[8], [16]])
+    # Matrix([[8], [16]])
 
     v1 = Vector([[1], [2], [3]])
     v2 = Vector([[2], [4], [8]])
@@ -65,5 +65,7 @@ if __name__ == "__main__":
     # Output:
     # Vector([[3],[6],[11]])
     # Or: Vector([[8], [16]
+
+    print()
 
     print(v1.dot(v2))
