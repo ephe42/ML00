@@ -52,8 +52,7 @@ def loss_(y, y_hat):
         and y.shape == y_hat.shape
         and y.shape[1] == 1
     ):
-        loss = np.square(y_hat - y).sum() / (2 * y.shape[0])
-        return loss
+        return np.square(y_hat - y).sum() / (2 * y.shape[0])
     return
 
 
